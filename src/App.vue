@@ -16,30 +16,30 @@
     <div
       class="shadow-md p-2 mb-2"
       v-for="submenu in subMenus"
-      :key="submenu.id"
+      :key="submenu.name"
     >
       {{ submenu.name }}
       <div
         class="p-2 flex mb-2 bg-slate-50"
-        v-for="meal in meals[submenu.id]"
+        v-for="meal in submenu.meals"
         :key="meal.name"
       >
         {{ meal.name }} | ${{ meal.price }}
       </div>
-      <div class="p-2 flex">
+      <div class="p-2 flex opacity-50 hover:opacity-100 group-focus:opacity-100">
         <input
           type="text"
           placeholder="Meal name"
           class="border-b focus:border-slate-800 outline-none"
-          v-model="mealNames[submenu.id]"
+          v-model="newMealNames[submenu.name]"
         />
         <input
           type="number"
           placeholder="Price"
           class="ml-2 border-b focus:border-slate-800 outline-none w-16"
-          v-model="mealPrices[submenu.id]"
+          v-model="newMealPrices[submenu.name]"
         />
-        <button @click="addMeal(submenu.id)">
+        <button @click="addMeal(submenu.name)">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -65,8 +65,9 @@
       </button>
     </div>
   </div>
-  All submenus for this menu in db:
-  {{ testData }}
+  Meals to add:
+  {{ newMealNames }}
+  {{ newMealPrices }}
 </template>
 <script>
 export default {
@@ -75,43 +76,39 @@ export default {
       newSubmenuName: "",
       testData: {},
       // добавить инпуты в стейт через вотч?
-      mealNames: [],
-      mealPrices: [],
+      newMealNames: {},
+      newMealPrices: {},
       subMenus: [
-        { name: "Sandwiches", id: 0 },
-        { name: "Salads", id: 1 },
-      ],
-      meals: [
-        [
+        { name: "Sandwiches", id: 0, meals:[
           { name: "Potato sandwich", price: 100 },
-          { name: "Jam sandwich", price: 100 },
-        ],
-        [{ name: "Cherry salad", price: 100 }],
+          { name: "Jam sandwich", price: 100 }]},
+        { name: "Salads", id: 1, meals:[]},
       ],
     };
   },
   methods: {
-    addMeal(submenuId) {
-      if (this.mealNames[submenuId].length < 1 || this.mealPrices[submenuId].length < 1) return;
-      const newMeal = { name: this.mealNames[submenuId], price: this.mealPrices[submenuId] };
-      this.meals[submenuId].push(newMeal);
-      this.mealNames[submenuId] = "";
-      this.mealPrices[submenuId] = "";
+    addMeal(submenuName) {
+      if (!this.newMealNames[submenuName] || !this.newMealPrices[submenuName]) return;
+      const submenuToChange = this.subMenus.find((submenu) => submenu.name === submenuName);
+      submenuToChange.meals.push({ name: this.newMealNames[submenuName], price: Number(this.newMealPrices[submenuName]) });
+      this.newMealNames[submenuName] = '';
+      this.newMealPrices[submenuName] = '';
     },
     addSubMenu() {
-      const newSubMenu = { name: this.newSubmenuName, id: this.subMenus.length }
+      const newSubMenu = { name: this.newSubmenuName, id: this.subMenus.length, meals:[]}
       this.subMenus.push(newSubMenu);
+      this.newSubmenuName = '';
     }
   },
-  created() {
-    const getMenu = async () => {
-      const f = await fetch("http://localhost:8000/api/v1/menus/1/submenus/");
-      const result = await f.json();
-      this.testData = result;
-      return result;
-    };
+  // created() {
+  //   const getMenu = async () => {
+  //     const f = await fetch("http://localhost:8000/api/v1/menus/1/submenus/");
+  //     const result = await f.json();
+  //     this.testData = result;
+  //     return result;
+  //   };
 
-    getMenu();
-  },
+  //   getMenu();
+  // },
 };
 </script>
