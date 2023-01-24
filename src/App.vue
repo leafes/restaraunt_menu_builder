@@ -12,6 +12,12 @@
         v-model="newSubmenuName"
         @keydown.enter="addSubMenu()"
       />
+      <input
+        type="text"
+        class="border-b p-2 mb-4 focus:border-slate-800 outline-none"
+        placeholder="Menu name"
+        v-model="menuName"
+        >
     </div>
     <div
       class="shadow-md p-2 mb-2"
@@ -60,6 +66,7 @@
     <div class="m-3 text-right">
       <button
         class="p-2 pl-4 pr-4 rounded-full border-green-200 border-2 active:bg-slate-100"
+        @click="saveNewMenu"
       >
         Save menu
       </button>
@@ -68,21 +75,24 @@
   Meals to add:
   {{ newMealNames }}
   {{ newMealPrices }}
+  {{ testData }}
 </template>
 <script>
 export default {
   data() {
     return {
+      menuName: "",
+      menuId: 0,
       newSubmenuName: "",
       testData: {},
       // добавить инпуты в стейт через вотч?
       newMealNames: {},
       newMealPrices: {},
       subMenus: [
-        { name: "Sandwiches", id: 0, meals:[
+        { name: "Sandwiches", id: 0, meals: [
           { name: "Potato sandwich", price: 100 },
           { name: "Jam sandwich", price: 100 }]},
-        { name: "Salads", id: 1, meals:[]},
+        { name: "Salads", id: 1, meals: []},
       ],
     };
   },
@@ -98,16 +108,50 @@ export default {
       const newSubMenu = { name: this.newSubmenuName, id: this.subMenus.length, meals:[]}
       this.subMenus.push(newSubMenu);
       this.newSubmenuName = '';
+    },
+    async saveNewMenu() {
+      const postToDB = async (obj, path) => {
+        const newBody = JSON.stringify(obj);
+        const response = await fetch(`http://localhost:8000/api/v1/${path}`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-type': 'application/json'
+          },
+          body: newBody,
+        });
+
+        return await response.json();
+      };
+
+      const createMenuData = await postToDB(
+        { title: this.menuName, description: 'bibaboba' },
+        'menus/'
+      );
+      const pathForThisMenu = `menus/${createMenuData.id}/submenus/`;
+
+      this.subMenus.forEach(async (submenu) => {
+        const submenuData = await postToDB({ title: submenu.name, description: 'add meals iter 2' },
+          pathForThisMenu
+        );
+        const pathForThisSubMenu = `${pathForThisMenu}${submenuData.id}/dishes/`;
+
+        submenu.meals.forEach(async (meal) => await postToDB({ title: meal.name, price: meal.price, description: 'bum' },
+            pathForThisSubMenu)
+          );
+
+      });
+
     }
   },
   // created() {
   //   const getMenu = async () => {
-  //     const f = await fetch("http://localhost:8000/api/v1/menus/1/submenus/");
+  //     const f = await fetch("http://localhost:8000/api/v1/menus");
   //     const result = await f.json();
   //     this.testData = result;
   //     return result;
   //   };
-
+  //
   //   getMenu();
   // },
 };
