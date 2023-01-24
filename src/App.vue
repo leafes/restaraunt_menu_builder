@@ -85,7 +85,6 @@ export default {
       menuId: 0,
       newSubmenuName: "",
       testData: {},
-      // добавить инпуты в стейт через вотч?
       newMealNames: {},
       newMealPrices: {},
       subMenus: [
