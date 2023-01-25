@@ -87,12 +87,7 @@ export default {
       testData: {},
       newMealNames: {},
       newMealPrices: {},
-      subMenus: [
-        { name: "Sandwiches", id: 0, meals: [
-          { name: "Potato sandwich", price: 100 },
-          { name: "Jam sandwich", price: 100 }]},
-        { name: "Salads", id: 1, meals: []},
-      ],
+      subMenus: [],
     };
   },
   methods: {
