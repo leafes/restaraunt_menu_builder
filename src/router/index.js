@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Editor from '../views/Editor.vue';
+import Edit from '../views/Edit.vue';
 import Home from '../views/Home.vue';
-import ViewMenu from '../views/ViewMenu.vue';
+import Menu from '../views/Menu.vue';
+import Create from '../views/Create.vue'
 
 const routes = [
   {
@@ -10,20 +11,25 @@ const routes = [
     component: Home
   },
   {
-    path: '/editor',
+    path: '/edit',
     name: 'Editor',
-    component: Editor
+    component: Edit
   },
   {
     path: '/menu',
     name: 'ViewMenu',
-    component: ViewMenu
-  }
-]
+    component: Menu
+  },
+  {
+    path: '/create',
+    name: 'Create',
+    component: Create
+  },
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
 });
 
 export default router;
