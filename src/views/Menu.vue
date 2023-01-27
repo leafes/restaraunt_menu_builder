@@ -25,9 +25,12 @@
 export default {
   data() {
     return {
-      menuId: 0,
+      menuId: this.$route.query.id || 0,
       menuInfo: {},
     };
+  },
+  created() {
+    if (this.menuId > 0) this.loadMenu();
   },
   methods: {
     async loadMenu() {
@@ -58,5 +61,10 @@ export default {
       return Object.keys(this.menuInfo).length > 0;
     },
   },
+  watch: {
+    menuId() {
+      this.$router.push({path: this.$route.fullPath, query: { id: this.menuId }});
+    }
+  }
 };
 </script>
