@@ -7,7 +7,7 @@
   />
   <br />
   <input
-    @keydown.enter="signUp"
+    @keydown.enter="registration"
     v-model="password"
     type="password"
     placeholder="Password"
@@ -16,30 +16,26 @@
   {{ test }}
 </template>
 <script>
+import { signIn, signUp } from "../services/api-fetch";
 export default {
   data() {
     return {
-      login: '',
-      password: '',
-      access_token: '',
-      test: {}
-    }
+      login: "",
+      password: "",
+      access_token: "",
+      test: '',
+    };
   },
   methods: {
-    async signUp() {
-      const user = { email: `${this.login}@gmail.com`, username: this.login, password: this.password };
-      this.test = user;
-        const newBody = JSON.stringify(user);
-        const response = await fetch(`http://localhost:8000/api/v1/auth/sign-up`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/json",
-          },
-          body: newBody,
-        })
-        this.test = await response.json();
-      }
-  }
-}
+    async registration() {
+      const user = {
+        email: `${this.login}@gmail.com`,
+        username: this.login,
+        password: this.password,
+      };
+      const response = await signUp(user);
+      localStorage.access_token = response.access_token;
+    },
+  },
+};
 </script>

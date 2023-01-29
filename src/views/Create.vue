@@ -3,17 +3,17 @@
     <p>Menu editor</p>
   </div>
 
-  <div>
+  <div class="mt-4">
     <input
       type="text"
-      class="border-b p-2 mb-4 focus:border-slate-800 outline-none w-full"
+      class="bg-gray-100 outline-none p-2 rounded-lg"
       placeholder="Menu name"
       v-model="menu.title"
     />
   </div>
   <input
     type="text"
-    class="border-b p-2 mb-4 focus:border-slate-800 outline-none"
+    class="border-b p-2 mb-4 focus:border-slate-800 outline-none mt-2"
     placeholder="Submenu name"
     v-model="newSubmenuTitle"
     @keydown.enter="addSubMenu()"
@@ -31,7 +31,7 @@
     >
       {{ dish.title }} | ${{ dish.price }}
     </div>
-    <div class="p-2 flex opacity-50 hover:opacity-100 group-focus:opacity-100">
+    <div class="p-2 mt-2 flex opacity-50 focus:opacity-100 group-focus:opacity-100">
       <input
         type="text"
         placeholder="Meal name"
