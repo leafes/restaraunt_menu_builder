@@ -53,4 +53,6 @@ export const createMenu = async (menu) => {
         })
     );
   });
+
+  return createMenuData.id;
 };

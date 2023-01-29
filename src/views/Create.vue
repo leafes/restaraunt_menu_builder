@@ -70,10 +70,7 @@
       Save menu
     </button>
   </div>
-  <!-- Menu: {{ menu }}
-  Meals to add:
-  {{ newMeals }}
-  {{ testData }} -->
+  {{ menuId }}
 </template>
 <script>
 import { createMenu } from '../services/api-fetch';
@@ -85,6 +82,7 @@ export default {
       testData: {},
       newMeals: {},
       subMenus: [],
+      menuId: 0,
     };
   },
   methods: {
@@ -105,7 +103,8 @@ export default {
       this.newSubmenuTitle = "";
     },
     async saveNewMenu() {
-      this.testData = await createMenu(this.menu);
+      this.menuId = await createMenu(this.menu);
+      setTimeout(() => this.$router.push({ name: 'ViewMenu', query: { id: this.menuId }}), 2000);
     },
   },
   // created() {
