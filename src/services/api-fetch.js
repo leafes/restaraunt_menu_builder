@@ -1,4 +1,4 @@
-const HOST = "http://localhost:8000";
+const HOST = "http://localhost:8000/api/v1/";
 
 const get = async (path) => {
   try {
@@ -26,30 +26,30 @@ const post = async (path, requestBody, token = null) => {
   }
 };
 
-export const signUp = async (user) => await post("/api/v1/auth/sign-up", user);
-export const signIn = async (user) => await post("/api/v1/auth/sign-in", user);
-export const getMenu = async (id) => await get(`/api/v1/menus/${id}`);
+export const signUp = async (user) => await post("auth/sign-up", user);
+export const signIn = async (user) => await post("auth/sign-in", user);
+export const getMenu = async (id) => await get(`menus/${id}`);
 
 export const createMenu = async (menu) => {
   const createMenuData = await post("menus/", {
     title: menu.title,
     description: menu.description,
   });
-  const pathForThisMenu = `menus/${createMenuData.id}/submenus/`;
 
+  const pathForThisMenu = `menus/${createMenuData.id}/submenus/`;
   menu.submenus.forEach(async (submenu) => {
     const submenuData = await post(pathForThisMenu, {
-      title: submenu.name,
-      description: submenu.description,
+      title: submenu.title,
+      description: submenu.description || 'bobster',
     });
+    console.log(submenuData);
     const pathForThisSubMenu = `${pathForThisMenu}${submenuData.id}/dishes/`;
-
-    submenu.meals.forEach(
-      async (meal) =>
+    submenu.dishes.forEach(
+      async (dish) =>
         await post(pathForThisSubMenu, {
-          title: meal.name,
-          price: meal.price,
-          description: meal.description,
+          title: dish.title,
+          price: dish.price,
+          description: dish.description,
         })
     );
   });
