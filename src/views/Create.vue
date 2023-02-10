@@ -91,6 +91,7 @@ export default {
         (submenu) => submenu.title === submenuTitle
       );
       const newMeal = this.newMeals[submenuTitle];
+      this.newMeals[submenuTitle] = {};
       submenuToUpdate.dishes.push(newMeal); 
     },
     addSubMenu() {
@@ -103,7 +104,9 @@ export default {
       this.newSubmenuTitle = "";
     },
     async saveNewMenu() {
-      this.menuId = await createMenu(this.menu);
+      const accessToken = localStorage.getItem('access_token');
+      console.log(accessToken);
+      this.menuId = await createMenu(this.menu, accessToken);
       setTimeout(() => this.$router.push({ name: 'ViewMenu', query: { id: this.menuId }}), 2000);
     },
   },
