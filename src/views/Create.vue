@@ -64,7 +64,7 @@
   </div>
   <div class="m-3 text-right">
     <button
-      class="p-2 pl-4 pr-4 rounded-full border-green-200 border-2 active:bg-slate-100"
+      class="bg-black mt-2 mb-4 px-10 text-white p-2.5 rounded-lg active:scale-95"
       @click="saveNewMenu"
     >
       Save menu
