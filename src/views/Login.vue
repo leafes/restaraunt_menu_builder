@@ -35,6 +35,7 @@ export default {
       };
       const response = await signUp(user);
       localStorage.access_token = response.access_token;
+      localStorage.username = user.username;
     },
   },
 };
