@@ -15,5 +15,4 @@ jobs:
           # You can target a project in a different organization
           # to the issue
           project-url: https://github.com/users/leafes/projects/2
-        env:
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
